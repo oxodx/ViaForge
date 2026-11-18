@@ -10,6 +10,7 @@
     "MixinGuiOverlayDebug",
     "MixinGuiScreenAddServer",
     "MixinGuiScreenServerList",
+    "MixinEntityPlayerSP",
     "MixinNetHandlerPlayClient",
     "MixinServerData",
     "compatibility.patcher.MixinProtocolVersionDetector",
