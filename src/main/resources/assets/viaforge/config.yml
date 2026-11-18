@@ -21,6 +21,11 @@ allow-betacraft-authentication: true
 # If enabled, ViaForge will show the current protocol version in the F3 menu.
 show-protocol-version-in-f3: true
 #
+# Experimental: map the lowest 256 blocks of extended-height worlds into the
+# legacy client's Y=0..255 range. This lets pre-1.17 clients enter lobbies below
+# Y=0, but hides the highest sections of the world.
+extended-height-workaround: true
+#
 #----------------------------------------------------------#
 #                       GUI OPTIONS                        #
 #----------------------------------------------------------#

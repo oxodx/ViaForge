@@ -34,6 +34,7 @@ public class ViaForgeConfig extends Config {
     public static final String VERIFY_SESSION_IN_OLD_VERSIONS = "verify-session-in-old-versions";
     public static final String ALLOW_BETACRAFT_AUTHENTICATION = "allow-betacraft-authentication";
     public static final String SHOW_PROTOCOL_VERSION_IN_F3 = "show-protocol-version-in-f3";
+    public static final String EXTENDED_HEIGHT_WORKAROUND = "extended-height-workaround";
 
     public static final String SHOW_MAIN_MENU_BUTTON = "show-main-menu-button";
     public static final String SHOW_MULTIPLAYER_BUTTON = "show-multiplayer-button";
@@ -83,6 +84,10 @@ public class ViaForgeConfig extends Config {
 
     public boolean isShowProtocolVersionInF3() {
         return getBoolean(SHOW_PROTOCOL_VERSION_IN_F3, true);
+    }
+
+    public boolean isExtendedHeightWorkaround() {
+        return getBoolean(EXTENDED_HEIGHT_WORKAROUND, true);
     }
 
     public boolean isShowMainMenuButton() {

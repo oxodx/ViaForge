@@ -19,7 +19,8 @@
     "connect.MixinNetworkManager_5",
     "connect.MixinServerPinger",
     "javadowngrader.MixinBulkChunkType",
-    "javadowngrader.MixinChunkType"
+    "javadowngrader.MixinChunkType",
+    "javadowngrader.MixinExtendedHeight"
   ],
   "verbose": true
 }
