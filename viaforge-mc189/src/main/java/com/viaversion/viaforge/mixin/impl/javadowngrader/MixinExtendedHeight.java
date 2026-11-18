@@ -133,7 +133,11 @@ public abstract class MixinExtendedHeight {
         }
     }
 
-    private static final class HeightOffsetStorage implements StorableObject {
+    public static final class HeightOffsetStorage implements StorableObject {
         private int offset;
+
+        public int offset() {
+            return offset;
+        }
     }
 }
