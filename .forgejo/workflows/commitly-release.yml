@@ -1,0 +1,55 @@
+name: Commitly Release
+
+on:
+  push:
+    branches:
+      - ver/1.8-1.12
+  workflow_dispatch:
+
+concurrency:
+  group: commitly-${{ forgejo.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: docker
+    steps:
+      - name: Checkout Repository
+        uses: https://data.forgejo.org/actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: https://data.forgejo.org/actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Build commitly artifacts
+        run: ./gradlew build --max-workers=1
+
+      - name: Stage release artifacts
+        env:
+          COMMIT_SHA: ${{ forgejo.sha }}
+          COMMIT_MESSAGE: ${{ forgejo.event.head_commit.message }}
+        run: |
+          mkdir -p dist/release
+          cp viaforge-mc189/build/libs/*.jar "dist/release/ViaForge-1.8.9-${COMMIT_SHA:0:7}.jar"
+          cp viaforge-mc1122/build/libs/*.jar "dist/release/ViaForge-1.12.2-${COMMIT_SHA:0:7}.jar"
+          printf 'Automated build of commit `%s`.\n\n%s\n' "$COMMIT_SHA" "$COMMIT_MESSAGE" > dist/release-notes.md
+
+      - name: Create Forgejo commitly release
+        uses: https://data.forgejo.org/actions/forgejo-release@v2.13.4
+        with:
+          direction: upload
+          url: ${{ forgejo.server_url }}
+          repo: ${{ forgejo.repository }}
+          token: ${{ forgejo.token }}
+          tag: commitly-${{ forgejo.sha }}
+          title: Commitly ${{ forgejo.sha }}
+          sha: ${{ forgejo.sha }}
+          release-dir: dist/release
+          release-notes-file: dist/release-notes.md
+          prerelease: true
+          override: true
