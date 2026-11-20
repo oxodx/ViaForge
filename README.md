@@ -1,82 +1,116 @@
-# This project has been archived!
-
-Forge and NeoForge ViaVersion have seen almost no use in recent months, aside from some very old client versions.
-Keeping the project updated and working has become increasingly time-consuming, and it’s no longer worth the effort.
-
-Please consider switching to the [FabricMC mod loader](https://fabricmc.net/)
-with [one of our Fabric platforms](https://viaversion.com/), or use [ViaProxy](https://github.com/ViaVersion/ViaProxy).
-
 <!--suppress HtmlDeprecatedAttribute -->
 <div align="center">
   <img src="https://raw.githubusercontent.com/ViaVersion/ViaForge/master/src/main/resources/icon.png" width="150" alt="ViaForge logo">
   <h1>ViaForge</h1>
-  <a href="https://files.minecraftforge.net/net/minecraftforge/forge"><img src="https://img.shields.io/badge/Mod%20Loader-Forge-lightyellow?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAYCAYAAACbU/80AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALySURBVEhLtZZPaBNBFMbzz42NtoII0aCiRQURVGIFEak3URFEEHqUCkVsPZSKoHjQiwjiQb1UFOlBUXoS0XjowYte1JutF6kKUtYIUQpN1k3zz9+bndos3TabNPng4817b+Z7Mzs7sxtoFKVSaV25XO6BD4vF4nodbi4QD+nmfxDbWqlUnsFfUIHYNZ12gUluI32R/Ed4Uof9g0EGPKVdBUS7nLIumMTbdT7BmLNwjHjOSSuklIAfMLhDN6V9Hx7XrvhrEJtyNOdBfBjzBP5RATcKcDSbzQa1zNJA7A7slTYrGmTwd/Z5tUoCcq+V7NL4DVP07Udjh23b/ooLGHSMwVPY/UJRw97V6QDuJYl54Af9RuBpijb2YqbT6RCr3YTIIQTHEEpiTVEndlj6ENuDW5RYNcj3KZHlAqGD8CrsolgHthv9HPYz+2hIH/y3qqobD5RAM0CxPgTfY3drfx/+NPaG9s+oklUgNm6a5oKj2zAQvI6uje0Xn/Yu2hNsUbJQKBj4k1JYI0/uOfGVavBykM/nIxSRfb7taKvVjUrOsqw425CQNrFeUu+wA7BTYvXC82jkcrlEKBTqjkajbcFg0JIQBfIcpQ+xWEy9AyBMcbEV+vzFrtAUTZXQmKsxrfu54DkBisXpLIVKTkT1s3kqVyKRiGyHraLzhTx1qtAGL6D5yHFrgAmcU8+d/YdWFUuwUQxpeRc8Z05neZPvwQEVqB+zcAKdT9ivLEhOz5hhGF9U1i8YdBS+QOgnnIW1ICfmFnfHzkwmU2tb/APRtbCTI/ZYF/KCfPmO6CGtAadgC0Xki+eFYd2tteDxtlMs7dR04bzuUhcauTblsxx1mi5s17Y14PYLs/q9rDTlLHgBLN6TIfps0EOaB4Tl0zwO/dwDM3CES0tuxZrwdVQQvIm57HgKb4i9ZGLfaK8Kh8MHsD0wLkkgN+RGbj7TcReH3wkkMfIzQrMyyXfilUpUgUe/mfgJmrLyGSb3lInNXdmLIBD4Bw72x5r0eQ99AAAAAElFTkSuQmCC" alt="Mod Loader: Forge"></a>
-  <img src="https://img.shields.io/badge/Enviroment-Client-purple" alt="Environment: Client">
-  <a href="https://discord.gg/viaversion"><img src="https://img.shields.io/discord/316206679014244363?color=0098DB&label=Discord&logo=discord&logoColor=0098DB" alt="Discord"></a> <br />
-  <a href="https://modrinth.com/mod/viaforge"><img src="https://img.shields.io/badge/dynamic/json?color=158000&label=downloads&prefix=+%20&query=downloads&url=https://api.modrinth.com/v2/project/Z6se2s8f&logo=modrinth" alt="Modrinth Downloads"></a>
-  <a href="https://curseforge.com/minecraft/mc-mods/viaforge"><img src="https://cf.way2muchnoise.eu/full_418933_downloads.svg" alt="CurseForge Downloads"></a>
-  <a href="https://github.com/ViaVersion/ViaForge/actions/workflows/build.yml"><img src="https://github.com/ViaVersion/ViaForge/actions/workflows/build.yml/badge.svg?branch=master" alt="Build Status"></a>  
+  <img src="https://img.shields.io/badge/Loaders-Forge%20%7C%20NeoForge-lightyellow" alt="Loaders: Forge and NeoForge">
+  <img src="https://img.shields.io/badge/Environment-Client-purple" alt="Environment: Client">
+  <a href="https://discord.gg/viaversion"><img src="https://img.shields.io/discord/316206679014244363?color=0098DB&label=Discord&logo=discord&logoColor=0098DB" alt="ViaVersion Discord"></a>
+  <br>
+  <a href="https://git.oxod.nl/oxod/ViaForge/actions"><img src="https://git.oxod.nl/oxod/ViaForge/actions/workflows/commitly-release.yml/badge.svg?branch=main" alt="Forgejo build status"></a>
+  <a href="https://modrinth.com/mod/viaforge"><img src="https://img.shields.io/badge/dynamic/json?color=158000&label=downloads&prefix=+%20&query=downloads&url=https://api.modrinth.com/v2/project/Z6se2s8f&logo=modrinth" alt="Modrinth downloads"></a>
+  <a href="https://curseforge.com/minecraft/mc-mods/viaforge"><img src="https://cf.way2muchnoise.eu/full_418933_downloads.svg" alt="CurseForge downloads"></a>
 
-  <p>Client-side ViaVersion implementation for MinecraftForge and NeoForge</p>
+  <p>Client-side ViaVersion implementation for Minecraft Forge and NeoForge.</p>
 </div>
 
-## How to (Users)
+This fork keeps the legacy and modern ViaForge implementations together on the
+`main` branch. It lets a supported Minecraft client connect to servers running
+other protocol versions without requiring ViaVersion on the server.
 
-If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want
-to
-check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out.
+## Supported clients
 
-### Supported Client versions
+| Minecraft | Loader |
+| --- | --- |
+| 1.8.9 | Forge |
+| 1.12.2 | Forge |
+| 1.16.5 | Forge |
+| 1.17.1 | Forge |
+| 1.18.2 | Forge |
+| 1.19.2 | Forge |
+| 1.19.4 | Forge |
+| 1.20.1 | Forge / NeoForge |
+| 1.20.4 | Forge |
+| 1.20.6 | Forge / NeoForge |
+| 1.21.11 | Forge / NeoForge |
 
-- Minecraft 26.x+ versions
-- 1.16.5 – 1.21.11
-- 1.8.9 / 1.12.2
-  using the Forge or NeoForge (1.20.1+) Loader.
+For newer clients, consider
+[ViaFabricPlus](https://modrinth.com/mod/viafabricplus) or
+[ViaProxy](https://github.com/ViaVersion/ViaProxy).
 
-For each year, there is a versioned branch named after that year (for example, `ver/26.x`). Each yearly branch contains
-all `26.x` releases published during that year.
+## Supported server protocols
 
-Additional version branches
+The bundled ViaVersion family provides translation for:
 
-- `ver/1.16-1.21`
-- `ver/1.8-1.12`
+- Release protocols from Minecraft 1.0 through 26.1
+- Beta b1.0 through b1.8.1
+- Alpha a1.0.15 through a1.2.6
+- Classic c0.0.15 through c0.30, including
+  [CPE](https://wiki.vg/Classic_Protocol_Extension)
+- Supported April Fools versions, including 3D Shareware, 20w14infinite, and
+  25w14craftmine
+- Combat Test 8c
 
-## Supported Server versions
+Protocol availability is determined by the bundled ViaVersion, ViaBackwards,
+ViaRewind, ViaLegacy, and ViaAprilFools versions.
 
-- Release (1.0.0 - 26.1)
-- Beta (b1.0 - b1.8.1)
-- Alpha (a1.0.15 - a1.2.6)
-- Classic (c0.0.15 - c0.30 including [CPE](https://wiki.vg/Classic_Protocol_Extension))
-- April Fools (3D Shareware, 20w14infinite, 25w14craftmine)
-- Combat Snapshots (Combat Test 8c)
+## Downloads
 
-Dev builds: https://ci.viaversion.com/view/Platforms/job/ViaForge/
+Every push to `main` builds all client modules and creates a prerelease on the
+[Forgejo releases page](https://git.oxod.nl/oxod/ViaForge/releases). Each jar is
+named after its Minecraft module; install only the jar matching your client.
 
-If you encounter any issues, please report them on either:
+## Legacy extended-height support
 
-- [the issue tracker](https://github.com/ViaVersion/ViaForge/issues)
-- [the ViaVersion Discord](https://discord.gg/viaversion)
+The 1.8.9 build includes an experimental `extended-height-workaround` option,
+enabled by default. It exposes the lowest 256 blocks of a modern extended-height
+dimension to the legacy client and translates player, chunk, block-entity, and
+block-update coordinates into that window.
 
-## How to (Developers)
+This is a compatibility window, not full extended-height rendering. Blocks
+outside the selected 256-block range cannot be shown by a 1.8.9 client.
 
-### How to build
+## Building
 
-1. Clone the repository with `git clone`.
-2. Run `./gradlew build` in the root directory of the repository.
-3. The compiled jar files can be found in `viaforge-mc<version>/build/libs`.
+Java 21 is required to build the project. The build scripts downgrade artifacts
+for Minecraft versions that require Java 8.
 
-Note: Build scripts are made to be run using Java 21.
+Build every supported client:
 
-### Anti cheat integration
+```bash
+./gradlew build --max-workers=1
+```
 
-ViaForge supports sending a custom payload to transmit player protocol version data to the server. This allows servers
-to retrieve a player's protocol version via plugin messages, which can be useful for anti-cheat checks and
-version-dependent logic.
-For more details on how to use this feature, see
-the [Server and Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Server-and-Player-Details-Protocol).
+Build one client, for example Minecraft 1.8.9:
+
+```bash
+./gradlew :viaforge-mc189:build --max-workers=1
+```
+
+Artifacts are written to `viaforge-mc<version>/build/libs`.
+
+## Anti-cheat integration
+
+ViaForge can send the player's protocol details using the
+[Server and Player Details Protocol](https://github.com/ViaVersion/ViaVersion/wiki/Server-and-Player-Details-Protocol).
+Servers must explicitly support that payload. A public server may otherwise see
+the translated target protocol instead of the client's native version, which can
+cause false positives in movement-sensitive anti-cheats.
+
+The 1.8.9 build adjusts its periodic position reminder when translating to a
+post-1.8 protocol to avoid GrimAC `BadPacketsE` violations caused by the vanilla
+1.8 twenty-tick reminder cadence.
+
+## Support
+
+Report fork-specific problems on the
+[Forgejo issue tracker](https://git.oxod.nl/oxod/ViaForge/issues). Include the
+matching Minecraft log and the exact ViaForge commit or release name.
+
+General ViaVersion questions can also be discussed in the
+[ViaVersion Discord](https://discord.gg/viaversion).
 
 ## Disclaimer
 
-It cannot be guaranteed that this mod is allowed on specific servers as it can possibly cause problems with anti-cheat
-plugins.\
-***(USE ONLY WITH CAUTION!)***
+Some servers prohibit protocol translation mods, and translated legacy behavior
+can differ from a native modern client. Check the server's rules before using
+ViaForge. Compatibility with every anti-cheat cannot be guaranteed.
