@@ -3,7 +3,7 @@ name: Commitly Release
 on:
   push:
     branches:
-      - ver/1.8-1.12
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -35,8 +35,7 @@ jobs:
           COMMIT_MESSAGE: ${{ forgejo.event.head_commit.message }}
         run: |
           mkdir -p dist/release
-          cp viaforge-mc189/build/libs/*.jar "dist/release/ViaForge-1.8.9-${COMMIT_SHA:0:7}.jar"
-          cp viaforge-mc1122/build/libs/*.jar "dist/release/ViaForge-1.12.2-${COMMIT_SHA:0:7}.jar"
+          find viaforge-mc*/build/libs -maxdepth 1 -type f -name '*.jar' -exec cp '{}' dist/release/ \;
           printf 'Automated build of commit `%s`.\n\n%s\n' "$COMMIT_SHA" "$COMMIT_MESSAGE" > dist/release-notes.md
 
       - name: Create Forgejo commitly release
