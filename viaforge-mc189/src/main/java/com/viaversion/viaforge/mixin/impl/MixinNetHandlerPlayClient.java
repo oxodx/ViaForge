@@ -19,18 +19,60 @@
 package com.viaversion.viaforge.mixin.impl;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.ConnectionDetails;
 import com.viaversion.viaforge.common.ViaForgeCommon;
 import io.netty.channel.Channel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(NetHandlerPlayClient.class)
 public class MixinNetHandlerPlayClient {
+
+    @Unique
+    private int viaForge$positionReminderTicks;
+
+    @Redirect(
+        method = "addToSendQueue",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/NetworkManager;sendPacket(Lnet/minecraft/network/Packet;)V"
+        )
+    )
+    private void viaForge$modernPositionReminder(NetworkManager networkManager, Packet<?> packet) {
+        if (packet instanceof C03PacketPlayer) {
+            C03PacketPlayer movement = (C03PacketPlayer) packet;
+            if (movement.isMoving()) {
+                this.viaForge$positionReminderTicks = 0;
+            } else {
+                ProtocolVersion targetVersion = ViaForgeCommon.getManager().getTargetVersion();
+                if (targetVersion != null && targetVersion.newerThan(ProtocolVersion.v1_8)
+                    && ++this.viaForge$positionReminderTicks >= 20) {
+                    Minecraft minecraft = Minecraft.getMinecraft();
+                    if (minecraft.thePlayer != null) {
+                        packet = new C03PacketPlayer.C04PacketPlayerPosition(
+                            minecraft.thePlayer.posX,
+                            minecraft.thePlayer.getEntityBoundingBox().minY,
+                            minecraft.thePlayer.posZ,
+                            movement.isOnGround()
+                        );
+                        this.viaForge$positionReminderTicks = 0;
+                    }
+                }
+            }
+        }
+
+        networkManager.sendPacket(packet);
+    }
 
     @Inject(method = "handleJoinGame", at = @At("RETURN"))
     public void sendConnectionDetails(CallbackInfo ci) {
