@@ -16,6 +16,7 @@ import com.viaversion.viaforge.common.ViaForgeCommon;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.StorableObject;
 import com.viaversion.viaversion.api.data.entity.EntityTracker;
+import com.viaversion.viaversion.api.minecraft.BlockPosition;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.protocols.v1_16_1to1_16_2.packet.ServerboundPackets1_16_2;
@@ -45,6 +46,26 @@ public abstract class MixinExtendedHeight {
         Protocol1_17To1_16_4 protocol = (Protocol1_17To1_16_4) (Object) this;
         protocol.appendClientbound(ClientboundPackets1_17.LOGIN, this::viaForge$configureWorldWindow);
         protocol.appendClientbound(ClientboundPackets1_17.RESPAWN, this::viaForge$configureWorldWindow);
+
+        PacketHandler shiftBlockPosition = wrapper -> {
+            HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
+            if (storage == null || storage.offset == 0) {
+                return;
+            }
+
+            BlockPosition position = wrapper.get(Types.BLOCK_POSITION1_14, 0);
+            wrapper.set(Types.BLOCK_POSITION1_14, 0, new BlockPosition(
+                position.x(), position.y() + storage.offset, position.z()
+            ));
+        };
+        protocol.appendClientbound(ClientboundPackets1_17.BLOCK_BREAK_ACK, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.BLOCK_DESTRUCTION, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.BLOCK_ENTITY_DATA, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.BLOCK_EVENT, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.BLOCK_UPDATE, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.OPEN_SIGN_EDITOR, shiftBlockPosition);
+        protocol.appendClientbound(ClientboundPackets1_17.SET_DEFAULT_SPAWN_POSITION, shiftBlockPosition);
+
         protocol.appendClientbound(ClientboundPackets1_17.PLAYER_POSITION, wrapper -> {
             HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
             if (storage == null || storage.offset == 0) {
