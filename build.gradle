@@ -101,8 +101,11 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: "net.minecraftforge.gradle"
-    apply plugin: "org.spongepowered.mixin"
+    def applyFg = project.hasProperty("applyFg") ? Boolean.parseBoolean(project.applyFg) : true
+    if (applyFg) {
+        apply plugin: "net.minecraftforge.gradle"
+        apply plugin: "org.spongepowered.mixin"
+    }
     apply plugin: "me.modmuss50.mod-publish-plugin"
 
     // Define the jar output attributes for all platforms
@@ -131,7 +134,8 @@ subprojects {
         library project(":") // Include the base project
     }
 
-    minecraft {
+    if (applyFg) {
+      minecraft {
         // Unify to mojang mappings for 1.14+, MCP for below
         if (versionId >= 1_16_5) {
             mappings channel: "official", version: mcVersion
@@ -164,17 +168,17 @@ subprojects {
                 }
             }
         }
-    }
+      }
 
-    sourceSets.main.resources {
-        srcDir "src/generated/resources"
-    }
+      sourceSets.main.resources {
+          srcDir "src/generated/resources"
+      }
 
-    dependencies {
+      dependencies {
         minecraft "net.minecraftforge:forge:${forge_version}"
         library "org.slf4j:slf4j-api:2.0.17"
 
-        if (versionId >= 1_16_5 && versionId < 1_20_6) {
+        if (versionId > 1_8_9 && versionId < 1_20_6) {
             // Always include for refmap in versions that don't have official mappings at runtime,
             // later exclude classes to prevent loading conflicts...
             library "org.spongepowered:mixin:${mixin_version}"
@@ -186,16 +190,17 @@ subprojects {
             compileOnly("net.neoforged.fancymodloader:loader:2.0.20") { transitive = false }
             compileOnly("net.neoforged:bus:8.0.5") { transitive = false }
         }
-    }
+      }
 
-    mixin {
-        add sourceSets.main, "mixins.viaforge.refmap.json"
-    }
+      mixin {
+          add sourceSets.main, "mixins.viaforge.refmap.json"
+      }
 
-    if (versionId < 1_20_6) { // Use official mappings at runtime, otherwise re-obfuscate output
-        reobf {
-            shadowJar {}
-        }
+      if (versionId < 1_20_6) { // Use official mappings at runtime, otherwise re-obfuscate output
+          reobf {
+              shadowJar {}
+          }
+      }
     }
 
     // Replace the version in the mod files with the project version
@@ -267,6 +272,32 @@ subprojects {
         inputFile = shadowJar.archiveFile
         destinationDirectory = temporaryDir
         logLevel = "FATAL"
+    }
+
+    if (!applyFg) {
+        afterEvaluate {
+            // Unimined creates its remap tasks after project evaluation. Downgrade
+            // the production-remapped legacy jar rather than the development jar.
+            def remapArchiveTask = tasks.findAll {
+                it.name.toLowerCase().contains("remap") && it.hasProperty("archiveFile")
+            }.sort { it.name }.find { it.name.toLowerCase().contains("shadow") } ?: tasks.findAll {
+                it.name.toLowerCase().contains("remap") && it.hasProperty("archiveFile")
+            }.sort { it.name }.find()
+
+            if (remapArchiveTask == null) {
+                throw new GradleException("No remap archive task found for ${project.path}")
+            }
+
+            tasks.named("downgradeJar") {
+                dependsOn(remapArchiveTask)
+                inputFile = remapArchiveTask.archiveFile
+            }
+
+            def remapDevJarTask = tasks.findByName("remapJar")
+            if (remapDevJarTask != null) {
+                remapDevJarTask.enabled = false
+            }
+        }
     }
 
     shadeDowngradedApi {
