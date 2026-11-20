@@ -24,10 +24,20 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          cache: gradle
+
+      - name: Restore Gradle cache
+        uses: https://data.forgejo.org/actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: gradle-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-v1-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Build commitly artifacts
-        run: ./gradlew build --max-workers=1
+        run: ./gradlew build --build-cache --max-workers=1
 
       - name: Stage release artifacts
         env:
