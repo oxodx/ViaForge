@@ -26,6 +26,7 @@ jobs:
           java-version: 21
 
       - name: Restore Gradle cache
+        id: gradle-cache
         uses: https://data.forgejo.org/actions/cache@v4
         with:
           path: |
@@ -34,6 +35,9 @@ jobs:
           key: gradle-v2-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-v2-${{ runner.os }}-${{ runner.arch }}-
+
+      - name: Report Gradle cache status
+        run: echo "Gradle cache hit: ${{ steps.gradle-cache.outputs.cache-hit }}"
 
       - name: Build commitly artifacts
         run: |
