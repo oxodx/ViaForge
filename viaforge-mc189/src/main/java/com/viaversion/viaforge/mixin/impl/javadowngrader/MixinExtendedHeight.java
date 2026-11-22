@@ -13,8 +13,8 @@ import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.ListTag;
 import com.viaversion.viabackwards.protocol.v1_17to1_16_4.Protocol1_17To1_16_4;
 import com.viaversion.viaforge.common.ViaForgeCommon;
+import com.viaversion.viaforge.protocol.HeightOffsetStorage;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.connection.StorableObject;
 import com.viaversion.viaversion.api.data.entity.EntityTracker;
 import com.viaversion.viaversion.api.minecraft.BlockPosition;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
@@ -49,13 +49,13 @@ public abstract class MixinExtendedHeight {
 
         PacketHandler shiftBlockPosition = wrapper -> {
             HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
-            if (storage == null || storage.offset == 0) {
+            if (storage == null || storage.offset() == 0) {
                 return;
             }
 
             BlockPosition position = wrapper.get(Types.BLOCK_POSITION1_14, 0);
             wrapper.set(Types.BLOCK_POSITION1_14, 0, new BlockPosition(
-                position.x(), position.y() + storage.offset, position.z()
+                position.x(), position.y() + storage.offset(), position.z()
             ));
         };
         protocol.appendClientbound(ClientboundPackets1_17.BLOCK_BREAK_ACK, shiftBlockPosition);
@@ -68,13 +68,13 @@ public abstract class MixinExtendedHeight {
 
         protocol.appendClientbound(ClientboundPackets1_17.PLAYER_POSITION, wrapper -> {
             HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
-            if (storage == null || storage.offset == 0) {
+            if (storage == null || storage.offset() == 0) {
                 return;
             }
 
             byte flags = wrapper.get(Types.BYTE, 0);
             if ((flags & RELATIVE_Y_FLAG) == 0) {
-                wrapper.set(Types.DOUBLE, 1, wrapper.get(Types.DOUBLE, 1) + storage.offset);
+                wrapper.set(Types.DOUBLE, 1, wrapper.get(Types.DOUBLE, 1) + storage.offset());
             }
         });
 
@@ -82,7 +82,7 @@ public abstract class MixinExtendedHeight {
             HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
             wrapper.passthrough(Types.DOUBLE); // X
             double y = wrapper.read(Types.DOUBLE);
-            wrapper.write(Types.DOUBLE, storage != null ? y - storage.offset : y);
+            wrapper.write(Types.DOUBLE, storage != null ? y - storage.offset() : y);
             wrapper.passthrough(Types.DOUBLE); // Z
         };
         protocol.appendServerbound(ServerboundPackets1_16_2.MOVE_PLAYER_POS, movePlayer);
@@ -107,7 +107,7 @@ public abstract class MixinExtendedHeight {
             storage = new HeightOffsetStorage();
             wrapper.user().put(storage);
         }
-        storage.offset = offset;
+        storage.setOffset(offset);
 
         if (offset == 0) {
             return;
@@ -151,14 +151,6 @@ public abstract class MixinExtendedHeight {
                 element.putInt("height", LEGACY_HEIGHT);
                 element.putInt("logical_height", LEGACY_HEIGHT);
             }
-        }
-    }
-
-    public static final class HeightOffsetStorage implements StorableObject {
-        private int offset;
-
-        public int offset() {
-            return offset;
         }
     }
 }

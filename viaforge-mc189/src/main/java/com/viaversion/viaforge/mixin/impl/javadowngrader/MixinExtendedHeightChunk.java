@@ -12,6 +12,7 @@ package com.viaversion.viaforge.mixin.impl.javadowngrader;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.NumberTag;
 import com.viaversion.viabackwards.protocol.v1_17to1_16_4.rewriter.BlockItemPacketRewriter1_17;
+import com.viaversion.viaforge.protocol.HeightOffsetStorage;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
@@ -36,8 +37,7 @@ public abstract class MixinExtendedHeightChunk {
             return value;
         }
 
-        MixinExtendedHeight.HeightOffsetStorage storage =
-            wrapper.user().get(MixinExtendedHeight.HeightOffsetStorage.class);
+        HeightOffsetStorage storage = wrapper.user().get(HeightOffsetStorage.class);
         if (storage == null || storage.offset() == 0) {
             return value;
         }
