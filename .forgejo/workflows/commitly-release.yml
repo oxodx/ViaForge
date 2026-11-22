@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: commitly-${{ forgejo.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   release:
@@ -25,6 +25,11 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Install cache compression
+        run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends zstd
+
       - name: Restore Gradle cache
         id: gradle-cache
         uses: https://data.forgejo.org/actions/cache@v4
@@ -32,8 +37,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-v2-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-v3-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
+            gradle-v3-${{ runner.os }}-${{ runner.arch }}-
             gradle-v2-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Report Gradle cache status
@@ -43,9 +49,9 @@ jobs:
       - name: Build commitly artifacts
         run: |
           if ! ./gradlew build --build-cache --max-workers=1; then
-            echo "Initial build failed; retrying in a fresh Gradle process to recover from transient downloads"
+            echo "Initial build failed; retrying once in a fresh Gradle process"
             ./gradlew --stop || true
-            ./gradlew build --build-cache --refresh-dependencies --max-workers=1
+            ./gradlew build --build-cache --max-workers=1
           fi
 
       - name: Verify Java 8 legacy artifact
