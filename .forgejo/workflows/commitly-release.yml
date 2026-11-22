@@ -48,6 +48,13 @@ jobs:
             ./gradlew build --build-cache --refresh-dependencies --max-workers=1
           fi
 
+      - name: Verify Java 8 legacy artifact
+        run: |
+          legacy_jar="$(find viaforge-mc189/build/libs -maxdepth 1 -type f -name '*.jar' -print -quit)"
+          test -n "$legacy_jar"
+          major_version="$(javap -verbose -classpath "$legacy_jar" com.viaversion.viaforge.mixin.MixinLoader | awk '/major version:/ { print $3 }')"
+          test "$major_version" = 52
+
       - name: Stage release artifacts
         env:
           COMMIT_SHA: ${{ forgejo.sha }}

@@ -288,9 +288,20 @@ subprojects {
                 throw new GradleException("No remap archive task found for ${project.path}")
             }
 
+            // The remapped archive is still Java 17 bytecode. Keep it as an
+            // intermediate so CI cannot mistake it for the Java 8 release jar.
+            if (remapArchiveTask.hasProperty("destinationDirectory")) {
+                remapArchiveTask.destinationDirectory = remapArchiveTask.temporaryDir
+            }
+
             tasks.named("downgradeJar") {
                 dependsOn(remapArchiveTask)
                 inputFile = remapArchiveTask.archiveFile
+            }
+
+            tasks.named("shadeDowngradedApi") {
+                archiveFileName = "${project.base.archivesName.get()}-${project.version}.jar"
+                destinationDirectory = project.layout.buildDirectory.dir("libs")
             }
 
             def remapDevJarTask = tasks.findByName("remapJar")
