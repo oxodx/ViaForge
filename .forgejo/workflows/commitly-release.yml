@@ -31,13 +31,17 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            .gradle
-          key: gradle-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-v2-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            gradle-v1-${{ runner.os }}-${{ runner.arch }}-
+            gradle-v2-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Build commitly artifacts
-        run: ./gradlew build --build-cache --max-workers=1
+        run: |
+          if ! ./gradlew build --build-cache --max-workers=1; then
+            echo "Initial build failed; retrying in a fresh Gradle process to recover from transient downloads"
+            ./gradlew --stop || true
+            ./gradlew build --build-cache --refresh-dependencies --max-workers=1
+          fi
 
       - name: Stage release artifacts
         env:
