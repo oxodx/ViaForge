@@ -37,7 +37,8 @@ jobs:
             gradle-v2-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Report Gradle cache status
-        run: echo "Gradle cache hit: ${{ steps.gradle-cache.outputs.cache-hit }}"
+        run: |
+          echo "Gradle cache hit: ${{ steps.gradle-cache.outputs.cache-hit }}"
 
       - name: Build commitly artifacts
         run: |
