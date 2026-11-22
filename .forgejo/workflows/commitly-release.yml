@@ -36,11 +36,9 @@ jobs:
         with:
           path: |
             ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-v3-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-v4-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            gradle-v3-${{ runner.os }}-${{ runner.arch }}-
-            gradle-v2-${{ runner.os }}-${{ runner.arch }}-
+            gradle-v4-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Report Gradle cache status
         run: |
