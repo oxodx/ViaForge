@@ -28,6 +28,7 @@ buildscript {
     // Unify build logic of all submodules in here, ugly but easier since we have to deal with a lot random stuff
     repositories {
         gradlePluginPortal()
+        mavenCentral()
 
         maven {
             url = "https://maven.minecraftforge.net/"
@@ -69,6 +70,7 @@ allprojects {
     }
 
     repositories {
+        mavenCentral()
         maven {
             url = "https://maven.minecraftforge.net/"
         }

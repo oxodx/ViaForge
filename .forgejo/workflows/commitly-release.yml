@@ -47,9 +47,9 @@ jobs:
       - name: Build commitly artifacts
         run: |
           if ! ./gradlew build --build-cache --max-workers=1; then
-            echo "Initial build failed; retrying once in a fresh Gradle process"
+            echo "Initial build failed; refreshing dependencies and retrying once in a fresh Gradle process"
             ./gradlew --stop || true
-            ./gradlew build --build-cache --max-workers=1
+            ./gradlew build --build-cache --refresh-dependencies --max-workers=1
           fi
 
       - name: Verify Java 8 legacy artifact
