@@ -24,6 +24,7 @@ import com.viaversion.viaversion.connection.ConnectionDetails;
 import com.viaversion.viaforge.common.ViaForgeCommon;
 import io.netty.channel.Channel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -83,6 +84,24 @@ public class MixinNetHandlerPlayClient {
         }
 
         ConnectionDetails.sendConnectionDetails(connection, ConnectionDetails.MOD_CHANNEL);
+    }
+
+    /**
+     * Some modern proxy backend switches do not produce a legacy position packet.
+     * Minecraft 1.8 normally relies on that packet to dismiss GuiDownloadTerrain,
+     * even though translated chunks and play packets are already arriving.
+     */
+    @Inject(method = "handleChunkData", at = @At("RETURN"))
+    private void viaForge$finishTranslatedTerrainDownload(CallbackInfo ci) {
+        ProtocolVersion targetVersion = ViaForgeCommon.getManager().getTargetVersion();
+        if (targetVersion == null || !targetVersion.newerThan(ProtocolVersion.v1_8)) {
+            return;
+        }
+
+        Minecraft minecraft = Minecraft.getMinecraft();
+        if (minecraft.currentScreen instanceof GuiDownloadTerrain) {
+            minecraft.displayGuiScreen(null);
+        }
     }
 
 }
